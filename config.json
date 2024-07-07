@@ -1,0 +1,13 @@
+{
+    "preconfigurations": {
+        "testQuestions": {
+            "role": "Profesor universitario licenciado/grado en [Grado/Licenciatura] experto en [Ámbito del que es experto]",
+            "action": "Redacta preguntas tipo test sobre el/la [Documento adjunto || Información] ",
+            "conditions": "Los alumnos están cursando el grado universitario de [Nombre del grado] de [Curso en el que se imparte la asignatura] de la asignatura [Nombre de asignatura]",
+            "additionalGuidance": "",
+            "formatRestrictions": "Deben ser [Número de preguntas] preguntas tipo test. Cada pregunta debe tener [Número de opciones] opciones posibles. Solo una de las opciones debe ser inequívocamente correcta. Las preguntas debes mostrarlas en formato AIKEN",
+            "temperature": 0.2,
+            "diversityPenalty": 0
+        }
+    }
+}

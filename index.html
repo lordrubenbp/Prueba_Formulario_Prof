@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Generador de Texto</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="form-container p-4 bg-light rounded">
+            <h1 class="mb-4">Formulario</h1>
+            <form id="infoForm">
+                <div class="form-group">
+                    <label for="preconfig" class="form-label-lg"><i class="fas fa-cogs"></i> Preconfiguración:</label>
+                    <select class="form-control form-control-sm" id="preconfig" name="preconfig">
+                        <option value="">Selecciona una preconfiguración</option>
+                        <option value="testQuestions">Preguntas tipo test</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role" class="form-label-lg"><i class="fas fa-user"></i> Rol:</label>
+                    <input type="text" class="form-control form-control-sm" id="role" name="role" required>
+                    <small class="form-text text-muted">Define el rol que debe asumir ChatGPT.</small>
+                    <div id="roleFields" style="display: none;">
+                        <input type="text" class="form-control form-control-sm mt-2" id="degree" name="degree" placeholder="Grado/Licenciatura">
+                        <input type="text" class="form-control form-control-sm mt-2" id="expertise" name="expertise" placeholder="Ámbito del que es experto">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="action" class="form-label-lg"><i class="fas fa-tasks"></i> Acción:</label>
+                    <select class="form-control form-control-sm" id="actionType" name="actionType">
+                        <option value="document">Documento adjunto</option>
+                        <option value="text">La siguiente información</option>
+                    </select>
+                    <input type="text" class="form-control form-control-sm mt-2" id="action" name="action" required>
+                    <small class="form-text text-muted">Especifica la acción principal que ChatGPT debe realizar.</small>
+                    <textarea class="form-control form-control-sm mt-2" id="actionText" name="actionText" style="display: none;" placeholder="Añadir el texto correspondiente"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="conditions" class="form-label-lg"><i class="fas fa-book"></i> Condiciones:</label>
+                    <input type="text" class="form-control form-control-sm" id="conditions" name="conditions" required>
+                    <small class="form-text text-muted">Incluye cualquier condición específica.</small>
+                    <div id="conditionsFields" style="display: none;">
+                        <input type="text" class="form-control form-control-sm mt-2" id="courseName" name="courseName" placeholder="Nombre del grado">
+                        <input type="text" class="form-control form-control-sm mt-2" id="courseYear" name="courseYear" placeholder="Curso en el que se imparte la asignatura">
+                        <input type="text" class="form-control form-control-sm mt-2" id="subject" name="subject" placeholder="Nombre de asignatura">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="additionalGuidance" class="form-label-lg"><i class="fas fa-info-circle"></i> Orientación adicional (opcional):</label>
+                    <input type="text" class="form-control form-control-sm" id="additionalGuidance" name="additionalGuidance">
+                    <small class="form-text text-muted">Proporciona detalles adicionales que pueden guiar a ChatGPT.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="formatRestrictions" class="form-label-lg"><i class="fas fa-list-ul"></i> Restricciones obligatorias del formato:</label>
+                    <input type="text" class="form-control form-control-sm" id="formatRestrictions" name="formatRestrictions" required>
+                    <small class="form-text text-muted">Establece las reglas específicas que la respuesta debe seguir.</small>
+                    <div id="formatFields" style="display: none;">
+                        <input type="number" class="form-control form-control-sm mt-2" id="numQuestions" name="numQuestions" placeholder="Número de preguntas">
+                        <input type="number" class="form-control form-control-sm mt-2" id="numOptions" name="numOptions" placeholder="Número de opciones">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="temperature" class="form-label-lg"><i class="fas fa-thermometer-half"></i> Grado de temperatura:</label>
+                    <input type="number" class="form-control form-control-sm" id="temperature" name="temperature" step="0.01" min="0" max="1" required>
+                    <small class="form-text text-muted">Define el nivel de creatividad y libertad en la generación de la respuesta.</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diversityPenalty" class="form-label-lg"><i class="fas fa-divide"></i> Diversity_penalty:</label>
+                    <input type="number" class="form-control form-control-sm" id="diversityPenalty" name="diversityPenalty" step="0.01" min="0" max="1" required>
+                    <small class="form-text text-muted">Ajusta la penalización por generar respuestas menos diversas.</small>
+                </div>
+                
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-primary btn-lg mr-2">Generar Texto</button>
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="copyText()">Copiar Texto</button>
+                </div>
+                <button type="button" class="btn btn-secondary btn-lg mt-2" onclick="resetForm()">Limpiar</button>
+            </form>
+            <div class="output-container mt-4 p-3 border" id="outputContainer"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
