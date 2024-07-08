@@ -11,12 +11,12 @@
 <body>
     <div class="container mt-5">
         <div class="form-container p-4 bg-light rounded">
-            <h1 class="mb-4">Formulario</h1>
+            <h1 class="mb-4">Formulario para crear tus prompts de ChatGPT a medida</h1>
             <form id="infoForm">
                 <div class="form-group">
-                    <label for="preconfig" class="form-label-lg"><i class="fas fa-cogs"></i> Preconfiguración:</label>
+                    <label for="preconfig" class="form-label-lg"><i class="fas fa-cogs"></i> Plantillas preconfiguradas:</label>
                     <select class="form-control form-control-sm" id="preconfig" name="preconfig">
-                        <option value="">Selecciona una preconfiguración</option>
+                        <option value="">Selecciona una plantilla</option>
                         <option value="testQuestions">Preguntas tipo test</option>
                     </select>
                 </div>
@@ -26,20 +26,20 @@
                     <input type="text" class="form-control form-control-sm" id="role" name="role" required>
                     <small class="form-text text-muted">Define el rol que debe asumir ChatGPT.</small>
                     <div id="roleFields" style="display: none;">
-                        <input type="text" class="form-control form-control-sm mt-2" id="degree" name="degree" placeholder="Grado/Licenciatura">
-                        <input type="text" class="form-control form-control-sm mt-2" id="expertise" name="expertise" placeholder="Ámbito del que es experto">
+                        <input type="text" class="form-control form-control-sm mt-2" id="degree" name="degree" placeholder="[Grado/Licenciatura]">
+                        <input type="text" class="form-control form-control-sm mt-2" id="expertise" name="expertise" placeholder="[Ámbito del que es experto]">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="action" class="form-label-lg"><i class="fas fa-tasks"></i> Acción:</label>
+                    <input type="text" class="form-control form-control-sm mt-2" id="action" name="action" required>
+                    <small class="form-text text-muted">Especifica la acción principal que ChatGPT debe realizar. Selecciona abajo de este texto sobre que contenido se va a realizar la acción</small>
                     <select class="form-control form-control-sm" id="actionType" name="actionType">
                         <option value="document">Documento adjunto</option>
-                        <option value="text">La siguiente información</option>
+                        <option value="text">Contexto</option>
                     </select>
-                    <input type="text" class="form-control form-control-sm mt-2" id="action" name="action" required>
-                    <small class="form-text text-muted">Especifica la acción principal que ChatGPT debe realizar.</small>
-                    <textarea class="form-control form-control-sm mt-2" id="actionText" name="actionText" style="display: none;" placeholder="Añadir el texto correspondiente"></textarea>
+                    <textarea class="form-control form-control-sm mt-2" id="actionText" name="actionText" style="display: none;" placeholder="Añadir el contexto sobre el que se va a realizar la acción"></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -47,15 +47,18 @@
                     <input type="text" class="form-control form-control-sm" id="conditions" name="conditions" required>
                     <small class="form-text text-muted">Incluye cualquier condición específica.</small>
                     <div id="conditionsFields" style="display: none;">
-                        <input type="text" class="form-control form-control-sm mt-2" id="courseName" name="courseName" placeholder="Nombre del grado">
-                        <input type="text" class="form-control form-control-sm mt-2" id="courseYear" name="courseYear" placeholder="Curso en el que se imparte la asignatura">
-                        <input type="text" class="form-control form-control-sm mt-2" id="subject" name="subject" placeholder="Nombre de asignatura">
+                        <input type="text" class="form-control form-control-sm mt-2" id="courseName" name="courseName" placeholder="[Nombre del grado]">
+                        <input type="text" class="form-control form-control-sm mt-2" id="courseYear" name="courseYear" placeholder="[Curso en el que se imparte la asignatura]">
+                        <input type="text" class="form-control form-control-sm mt-2" id="subject" name="subject" placeholder="[Nombre de asignatura]">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="additionalGuidance" class="form-label-lg"><i class="fas fa-info-circle"></i> Orientación adicional (opcional):</label>
-                    <input type="text" class="form-control form-control-sm" id="additionalGuidance" name="additionalGuidance">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="additionalGuidanceCheckbox">
+                        <label for="additionalGuidance" class="form-label-lg"><i class="fas fa-info-circle"></i> Orientación adicional:</label>
+                    </div>
+                    <input type="text" class="form-control form-control-sm" id="additionalGuidance" name="additionalGuidance" disabled>
                     <small class="form-text text-muted">Proporciona detalles adicionales que pueden guiar a ChatGPT.</small>
                 </div>
                 
@@ -64,23 +67,92 @@
                     <input type="text" class="form-control form-control-sm" id="formatRestrictions" name="formatRestrictions" required>
                     <small class="form-text text-muted">Establece las reglas específicas que la respuesta debe seguir.</small>
                     <div id="formatFields" style="display: none;">
-                        <input type="number" class="form-control form-control-sm mt-2" id="numQuestions" name="numQuestions" placeholder="Número de preguntas">
-                        <input type="number" class="form-control form-control-sm mt-2" id="numOptions" name="numOptions" placeholder="Número de opciones">
+                        <input type="number" class="form-control form-control-sm mt-2" id="numQuestions" name="numQuestions" placeholder="[Número de preguntas]">
+                        <input type="number" class="form-control form-control-sm mt-2" id="numOptions" name="numOptions" placeholder="[Número de opciones]">
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="temperature" class="form-label-lg"><i class="fas fa-thermometer-half"></i> Grado de temperatura:</label>
-                    <input type="number" class="form-control form-control-sm" id="temperature" name="temperature" step="0.01" min="0" max="1" required>
-                    <small class="form-text text-muted">Define el nivel de creatividad y libertad en la generación de la respuesta.</small>
+                <button type="button" class="btn btn-link" id="toggleAdvancedOptions">Mostrar opciones avanzadas</button>
+                <div id="advancedOptions" style="display: none;">
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="temperatureCheckbox">
+                            <label for="temperature" class="form-label-lg"><i class="fas fa-thermometer-half"></i> Grado de temperatura:</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="temperature" name="temperature" step="0.1" min="0" max="1" disabled>
+                        <small class="form-text text-muted">Define el nivel de creatividad y libertad en la generación de la respuesta. Un valor más alto significa más creatividad. Rango típico: 0.0 a 1.0</small>
+                        <span id="temperatureValue" class="slider-value"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="diversityPenaltyCheckbox">
+                            <label for="diversityPenalty" class="form-label-lg"><i class="fas fa-divide"></i> Penalización por falta de diversidad:</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="diversityPenalty" name="diversityPenalty" step="0.1" min="0" max="2" disabled>
+                        <small class="form-text text-muted">Ajusta la penalización por generar respuestas menos diversas. Un valor más alto fomenta respuestas más variadas. Rango típico: 0.0 a 1.0</small>
+                        <span id="diversityPenaltyValue" class="slider-value"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="maxTokensCheckbox">
+                            <label for="maxTokens" class="form-label-lg"><i class="fas fa-file-word"></i> Número máximo de palabras:</label>
+                        </div>
+                        <input type="number" class="form-control form-control-sm" id="maxTokens" name="maxTokens" disabled>
+                        <small class="form-text text-muted">Establece el número máximo de palabras que la respuesta puede tener.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="topKCheckbox">
+                            <label for="topK" class="form-label-lg"><i class="fas fa-sort-numeric-up-alt"></i> Top-k:</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="topK" name="topK" min="1" max="100" disabled>
+                        <small class="form-text text-muted">Limita la selección de palabras a las 'k' más probables durante la generación de texto.Un valor más bajo hace las respuestas más predecibles. Rango típico: 1 a 100</small>
+                        <span id="topKValue" class="slider-value"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="topPCheckbox">
+                            <label for="topP" class="form-label-lg"><i class="fas fa-percentage"></i> Top-p (Nucleus Sampling):</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="topP" name="topP" step="0.1" min="0" max="1" disabled>
+                        <small class="form-text text-muted">Selecciona el conjunto más pequeño de palabras cuya probabilidad acumulada supera un valor 'p'. Un valor más alto da respuestas más variadas. Rango típico: 0.0 a 1.0</small>
+                        <span id="topPValue" class="slider-value"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="repetitionPenaltyCheckbox">
+                            <label for="repetitionPenalty" class="form-label-lg"><i class="fas fa-redo-alt"></i> Penalización por repetición:</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="repetitionPenalty" name="repetitionPenalty" step="0.1" min="1" max="2" disabled>
+                        <small class="form-text text-muted">Penaliza la repetición de palabras y frases en la respuesta. Un valor más alto reduce la repetición. Rango típico: 1.0 a 2.0</small>
+                        <span id="repetitionPenaltyValue" class="slider-value"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="lengthPenaltyCheckbox">
+                            <label for="lengthPenalty" class="form-label-lg"><i class="fas fa-text-height"></i> Penalización por longitud:</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="lengthPenalty" name="lengthPenalty" step="0.01" min="0" max="2" disabled>
+                        <small class="form-text text-muted">Ajusta la preferencia por respuestas más cortas o más largas. Un valor más alto favorece respuestas más largas. Rango típico: 0.0 a 2.0</small>
+                        <span id="lengthPenaltyValue" class="slider-value"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="promptImportanceCheckbox">
+                            <label for="promptImportance" class="form-label-lg"><i class="fas fa-exclamation-circle"></i> Prompt Importance (Importancia del Prompt):</label>
+                        </div>
+                        <input type="range" class="form-control-range" id="promptImportance" name="promptImportance" step="0.1" min="0" max="5" disabled>
+                        <small class="form-text text-muted">Ajusta la influencia del texto de entrada (prompt) en las respuestas generadas. Rango típico: 0.0 a 5.0</small>
+                        <span id="promptImportanceValue" class="slider-value"></span>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="diversityPenalty" class="form-label-lg"><i class="fas fa-divide"></i> Diversity_penalty:</label>
-                    <input type="number" class="form-control form-control-sm" id="diversityPenalty" name="diversityPenalty" step="0.01" min="0" max="1" required>
-                    <small class="form-text text-muted">Ajusta la penalización por generar respuestas menos diversas.</small>
-                </div>
-                
                 <div class="d-flex">
                     <button type="submit" class="btn btn-primary btn-lg mr-2">
                         <i class="fas fa-file-alt"></i> Generar Texto
@@ -96,6 +168,8 @@
             <div class="output-container mt-4 p-3 border" id="outputContainer"></div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="main.js"></script>
+    <script src="advancedOptions.js"></script>
+    <script src="formHandlers.js"></script>
 </body>
 </html>

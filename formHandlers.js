@@ -1,19 +1,24 @@
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('config.json')
-        .then(response => response.json())
-        .then(data => {
-            window.preconfigurations = data.preconfigurations;
-        });
-});
+function initializeFormHandlers() {
+    document.getElementById('preconfig').addEventListener('change', handlePreconfigChange);
+    document.getElementById('actionType').addEventListener('change', handleActionTypeChange);
+    document.getElementById('infoForm').addEventListener('submit', handleSubmit);
+    document.getElementById('additionalGuidanceCheckbox').addEventListener('change', handleAdditionalGuidanceChange);
+}
 
-document.getElementById('preconfig').addEventListener('change', function() {
+function handlePreconfigChange() {
     const preconfig = this.value;
     const roleFields = document.getElementById('roleFields');
     const conditionsFields = document.getElementById('conditionsFields');
     const formatFields = document.getElementById('formatFields');
 
     if (preconfig && window.preconfigurations && window.preconfigurations[preconfig]) {
+
+       
         const config = window.preconfigurations[preconfig];
+
+        // TODO Añade tambien la funcion de desactivar cuando no hay plantilla que se queda visible
+        activateAdvancedFields(config);
+
         document.getElementById('role').value = config.role;
         document.getElementById('action').value = config.action;
         document.getElementById('conditions').value = config.conditions;
@@ -58,6 +63,9 @@ document.getElementById('preconfig').addEventListener('change', function() {
         document.getElementById('courseYear').classList.add('placeholder');
         document.getElementById('subject').classList.add('placeholder');
     } else {
+
+        deactivateAdvancedFields();
+
         roleFields.style.display = 'none';
         conditionsFields.style.display = 'none';
         formatFields.style.display = 'none';
@@ -102,9 +110,9 @@ document.getElementById('preconfig').addEventListener('change', function() {
         document.getElementById('courseYear').classList.remove('placeholder');
         document.getElementById('subject').classList.remove('placeholder');
     }
-});
+}
 
-document.getElementById('actionType').addEventListener('change', function() {
+function handleActionTypeChange() {
     const actionType = this.value;
     const actionText = document.getElementById('actionText');
 
@@ -114,34 +122,39 @@ document.getElementById('actionType').addEventListener('change', function() {
         actionText.style.display = 'none';
         actionText.value = '';
     }
-});
+}
 
-document.getElementById('infoForm').addEventListener('submit', function(event) {
+function handleAdditionalGuidanceChange() {
+    const additionalGuidance = document.getElementById('additionalGuidance');
+    additionalGuidance.disabled = !this.checked;
+    if (!this.checked) {
+        additionalGuidance.value = '';
+    }
+}
+
+function handleSubmit(event) {
     event.preventDefault();
+
+    if (document.getElementById('preconfig').value === 'testQuestions' && !allRequiredFieldsFilled()) {
+        alert('Por favor, complete todos los campos requeridos antes de generar el texto.');
+        return;
+    }
+
     const role = document.getElementById('role').value;
     const actionType = document.getElementById('actionType').value;
-    const action = document.getElementById('action').value + (actionType === 'text' ? document.getElementById('actionText').value : 'document adjunto');
+    const action = document.getElementById('action').value + (actionType === 'text' ? document.getElementById('actionText').value : ' del documento adjunto');
     const conditions = document.getElementById('conditions').value;
     const additionalGuidance = document.getElementById('additionalGuidance').value;
     const formatRestrictions = document.getElementById('formatRestrictions').value;
-    const temperature = document.getElementById('temperature').value;
-    const diversityPenalty = document.getElementById('diversityPenalty').value;
 
     let outputText = `Rol: ${role}
 Acción: ${action}
 Condiciones: ${conditions}
-Orientación adicional: ${additionalGuidance}
-Restricciones obligatorias del formato: ${formatRestrictions}
-Grado de temperatura: ${temperature}
-Diversity_penalty: ${diversityPenalty}`;
-    
-    if (!additionalGuidance) {
-        outputText = `Rol: ${role}
-Acción: ${action}
-Condiciones: ${conditions}
-Restricciones obligatorias del formato: ${formatRestrictions}
-Grado de temperatura: ${temperature}
-Diversity_penalty: ${diversityPenalty}`;
+Restricciones obligatorias del formato: ${formatRestrictions}`;
+
+    if (additionalGuidance) {
+        outputText += `
+Orientación adicional: ${additionalGuidance}`;
     }
 
     if (document.getElementById('preconfig').value === 'testQuestions') {
@@ -159,11 +172,30 @@ Diversity_penalty: ${diversityPenalty}`;
                                .replace('[Curso en el que se imparte la asignatura]', courseYear)
                                .replace('[Nombre de asignatura]', subject)
                                .replace('[Número de preguntas]', numQuestions)
-                               .replace('[Número de opciones]', numOptions);
+                               .replace('[Número de opciones]', numOptions)
+                               .replace('[Documento adjunto || Contexto]','');
     }
 
+    // Añadir campos avanzados si están habilitados
+    const advancedFields = [
+        { checkbox: 'temperatureCheckbox', field: 'temperature', label: 'Grado de temperatura' },
+        { checkbox: 'diversityPenaltyCheckbox', field: 'diversityPenalty', label: 'Diversity Penalty' },
+        { checkbox: 'maxTokensCheckbox', field: 'maxTokens', label: 'Max Tokens' },
+        { checkbox: 'topKCheckbox', field: 'topK', label: 'Top-k' },
+        { checkbox: 'topPCheckbox', field: 'topP', label: 'Top-p' },
+        { checkbox: 'repetitionPenaltyCheckbox', field: 'repetitionPenalty', label: 'Repetition Penalty' },
+        { checkbox: 'lengthPenaltyCheckbox', field: 'lengthPenalty', label: 'Length Penalty' },
+        { checkbox: 'promptImportanceCheckbox', field: 'promptImportance', label: 'Prompt Importance' }
+    ];
+
+    advancedFields.forEach(({ checkbox, field, label }) => {
+        if (document.getElementById(checkbox).checked) {
+            outputText += `\n${label}: ${document.getElementById(field).value}`;
+        }
+    });
+
     document.getElementById('outputContainer').innerText = outputText;
-});
+}
 
 function copyText() {
     const outputContainer = document.getElementById('outputContainer');
@@ -181,6 +213,8 @@ function resetForm() {
     document.getElementById('roleFields').style.display = 'none';
     document.getElementById('conditionsFields').style.display = 'none';
     document.getElementById('formatFields').style.display = 'none';
+    document.getElementById('advancedOptions').style.display = 'none';
+    document.getElementById('toggleAdvancedOptions').textContent = 'Mostrar opciones avanzadas';
     document.getElementById('actionText').style.display = 'none';
 
     // Desbloquear campos de texto
@@ -191,6 +225,12 @@ function resetForm() {
     document.getElementById('formatRestrictions').readOnly = false;
     document.getElementById('temperature').readOnly = false;
     document.getElementById('diversityPenalty').readOnly = false;
+    document.getElementById('maxTokens').readOnly = false;
+    document.getElementById('topK').readOnly = false;
+    document.getElementById('topP').readOnly = false;
+    document.getElementById('repetitionPenalty').readOnly = false;
+    document.getElementById('lengthPenalty').readOnly = false;
+    document.getElementById('promptImportance').readOnly = false;
 
     // Limpiar y bloquear campos que deben ser completados
     document.getElementById('degree').value = '';
@@ -214,4 +254,16 @@ function resetForm() {
     document.getElementById('courseName').classList.remove('placeholder');
     document.getElementById('courseYear').classList.remove('placeholder');
     document.getElementById('subject').classList.remove('placeholder');
+}
+
+function allRequiredFieldsFilled() {
+    const degree = document.getElementById('degree').value;
+    const expertise = document.getElementById('expertise').value;
+    const courseName = document.getElementById('courseName').value;
+    const courseYear = document.getElementById('courseYear').value;
+    const subject = document.getElementById('subject').value;
+    const numQuestions = document.getElementById('numQuestions').value;
+    const numOptions = document.getElementById('numOptions').value;
+
+    return degree && expertise && courseName && courseYear && subject && numQuestions && numOptions;
 }

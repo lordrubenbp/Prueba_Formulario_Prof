@@ -20,3 +20,9 @@ body {
 .placeholder {
     color: #999;
 }
+
+.slider-value {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-left: 10px;
+}
