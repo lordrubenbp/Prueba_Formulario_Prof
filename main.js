@@ -9,3 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAdvancedOptions();
     initializeFormHandlers();
 });
+
+document.getElementById('themeSwitch').addEventListener('change', function() {
+    if (this.checked) {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+    }
+});
+

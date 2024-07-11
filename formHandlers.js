@@ -71,6 +71,7 @@ function handlePreconfigChange() {
                 const element = document.getElementById(field);
                 if (element) {
                     element.value = cleanConfigValue(config[field]);
+                    element.readOnly = true;
                 }
             }
         });
