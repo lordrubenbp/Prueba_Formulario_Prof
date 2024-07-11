@@ -19,6 +19,7 @@ body {
 
 .placeholder {
     color: #999;
+    font-style: italic;
 }
 
 .slider-value {
@@ -26,3 +27,4 @@ body {
     font-weight: 600;
     margin-left: 10px;
 }
+

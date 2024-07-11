@@ -18,6 +18,7 @@
                     <select class="form-control form-control-sm" id="preconfig" name="preconfig">
                         <option value="">Selecciona una plantilla</option>
                         <option value="testQuestions">Preguntas tipo test</option>
+                        <option value="developQuestions">Preguntas de desarrollo</option>
                     </select>
                 </div>
                 
@@ -25,32 +26,21 @@
                     <label for="role" class="form-label-lg"><i class="fas fa-user"></i> Rol:</label>
                     <input type="text" class="form-control form-control-sm" id="role" name="role" required>
                     <small class="form-text text-muted">Define el rol que debe asumir ChatGPT.</small>
-                    <div id="roleFields" style="display: none;">
-                        <input type="text" class="form-control form-control-sm mt-2" id="degree" name="degree" placeholder="[Grado/Licenciatura]">
-                        <input type="text" class="form-control form-control-sm mt-2" id="expertise" name="expertise" placeholder="[Ámbito del que es experto]">
-                    </div>
+                    <div id="roleFields" style="display: none;"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="action" class="form-label-lg"><i class="fas fa-tasks"></i> Acción:</label>
                     <input type="text" class="form-control form-control-sm mt-2" id="action" name="action" required>
                     <small class="form-text text-muted">Especifica la acción principal que ChatGPT debe realizar. Selecciona abajo de este texto sobre que contenido se va a realizar la acción</small>
-                    <select class="form-control form-control-sm" id="actionType" name="actionType">
-                        <option value="document">Documento adjunto</option>
-                        <option value="text">Contexto</option>
-                    </select>
-                    <textarea class="form-control form-control-sm mt-2" id="actionText" name="actionText" style="display: none;" placeholder="Añadir el contexto sobre el que se va a realizar la acción"></textarea>
+                    <div id="actionFields" style="display: none;"></div>
                 </div>
                 
                 <div class="form-group">
                     <label for="conditions" class="form-label-lg"><i class="fas fa-book"></i> Condiciones:</label>
                     <input type="text" class="form-control form-control-sm" id="conditions" name="conditions" required>
                     <small class="form-text text-muted">Incluye cualquier condición específica.</small>
-                    <div id="conditionsFields" style="display: none;">
-                        <input type="text" class="form-control form-control-sm mt-2" id="courseName" name="courseName" placeholder="[Nombre del grado]">
-                        <input type="text" class="form-control form-control-sm mt-2" id="courseYear" name="courseYear" placeholder="[Curso en el que se imparte la asignatura]">
-                        <input type="text" class="form-control form-control-sm mt-2" id="subject" name="subject" placeholder="[Nombre de asignatura]">
-                    </div>
+                    <div id="conditionsFields" style="display: none;"></div>
                 </div>
                 
                 <div class="form-group">
@@ -66,10 +56,7 @@
                     <label for="formatRestrictions" class="form-label-lg"><i class="fas fa-list-ul"></i> Restricciones obligatorias del formato:</label>
                     <input type="text" class="form-control form-control-sm" id="formatRestrictions" name="formatRestrictions" required>
                     <small class="form-text text-muted">Establece las reglas específicas que la respuesta debe seguir.</small>
-                    <div id="formatFields" style="display: none;">
-                        <input type="number" class="form-control form-control-sm mt-2" id="numQuestions" name="numQuestions" placeholder="[Número de preguntas]">
-                        <input type="number" class="form-control form-control-sm mt-2" id="numOptions" name="numOptions" placeholder="[Número de opciones]">
-                    </div>
+                    <div id="formatFields" style="display: none;"></div>
                 </div>
                 
                 <button type="button" class="btn btn-link" id="toggleAdvancedOptions">Mostrar opciones avanzadas</button>
@@ -130,7 +117,7 @@
                         </div>
                         <input type="range" class="form-control-range" id="repetitionPenalty" name="repetitionPenalty" step="0.1" min="1" max="2" disabled>
                         <small class="form-text text-muted">Penaliza la repetición de palabras y frases en la respuesta. Un valor más alto reduce la repetición. Rango típico: 1.0 a 2.0</small>
-                        <span id="repetitionPenaltyValue" class="slider-value"></span>
+                        <span id="repetitionPenaltyValue"></span>
                     </div>
 
                     <div class="form-group">
@@ -140,7 +127,7 @@
                         </div>
                         <input type="range" class="form-control-range" id="lengthPenalty" name="lengthPenalty" step="0.01" min="0" max="2" disabled>
                         <small class="form-text text-muted">Ajusta la preferencia por respuestas más cortas o más largas. Un valor más alto favorece respuestas más largas. Rango típico: 0.0 a 2.0</small>
-                        <span id="lengthPenaltyValue" class="slider-value"></span>
+                        <span id="lengthPenaltyValue"></span>
                     </div>
 
                     <div class="form-group">
@@ -150,17 +137,17 @@
                         </div>
                         <input type="range" class="form-control-range" id="promptImportance" name="promptImportance" step="0.1" min="0" max="5" disabled>
                         <small class="form-text text-muted">Ajusta la influencia del texto de entrada (prompt) en las respuestas generadas. Rango típico: 0.0 a 5.0</small>
-                        <span id="promptImportanceValue" class="slider-value"></span>
+                        <span id="promptImportanceValue"></span>
                     </div>
                 </div>
                 <div class="d-flex">
                     <button type="submit" class="btn btn-primary btn-lg mr-2">
                         <i class="fas fa-file-alt"></i> Generar Texto
                     </button>
-                    <button type="button" class="btn btn-secondary btn-lg mr-2" onclick="copyText()">
+                    <button id="copyButton" type="button" class="btn btn-primary btn-lg mr-2" onclick="copyText()">
                         <i class="fas fa-copy"></i> Copiar Texto
                     </button>
-                    <button type="button" class="btn btn-secondary btn-lg" onclick="resetForm()">
+                    <button id="cleanButton" type="button" class="btn btn-primary btn-lg" onclick="resetForm()">
                         <i class="fas fa-eraser"></i> Limpiar
                     </button>
                 </div>
