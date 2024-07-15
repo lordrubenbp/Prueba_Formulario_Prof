@@ -28,24 +28,26 @@
                         <option value="practicalExercise">Ejercicio practico</option>
                     </select>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="role" class="form-label"><i class="fas fa-user"></i> Rol:</label>
-                    <input type="text" class="form-control form-control-sm" id="role" name="role" required>
+                    <textarea type="text" class="form-control form-control-sm" id="role" name="role" required></textarea>
                     <small class="form-text text-muted">Define el rol que debe asumir ChatGPT.</small>
                     <div id="roleFields" style="display: none;"></div>
                 </div>
                 
                 <div class="mb-3">
                     <label for="action" class="form-label"><i class="fas fa-tasks"></i> Acción:</label>
-                    <input type="text" class="form-control form-control-sm mt-2" id="action" name="action" required>
-                    <small class="form-text text-muted">Especifica la acción principal que ChatGPT debe realizar. Selecciona abajo de este texto sobre que contenido se va a realizar la acción</small>
+                    <textarea type="text" class="form-control form-control-sm mt-2" id="action" name="action" required></textarea>
+                    <small class="form-text text-muted">Especifica la acción principal que ChatGPT debe realizar. Indica sobre qué contenido se va a realizar la acción. Si es sobre un documento que vas a añadir a tu consulta, escribe "Documento adjunto". Si, por el contrario, vas a redactar el contexto, puedes hacerlo también en el campo de texto abajo de estas líneas.
+
+                    </small>
                     <div id="actionFields" style="display: none;"></div>
                 </div>
                 
                 <div class="mb-3">
                     <label for="conditions" class="form-label"><i class="fas fa-book"></i> Condiciones:</label>
-                    <input type="text" class="form-control form-control-sm" id="conditions" name="conditions" required>
+                    <textarea type="text" class="form-control form-control-sm" id="conditions" name="conditions" required></textarea>
                     <small class="form-text text-muted">Incluye cualquier condición específica.</small>
                     <div id="conditionsFields" style="display: none;"></div>
                 </div>
@@ -53,13 +55,13 @@
                 <div class="mb-3 form-check form-switch">
                     <input role="switch" type="checkbox" class="form-check-input" id="additionalGuidanceCheckbox">
                     <label for="additionalGuidance" class="form-check-label"><i class="fas fa-info-circle"></i> Orientación adicional:</label>
-                    <input type="text" class="form-control form-control-sm" id="additionalGuidance" name="additionalGuidance" disabled>
+                    <textarea type="text" class="form-control form-control-sm" id="additionalGuidance" name="additionalGuidance" disabled></textarea>
                     <small class="form-text text-muted">Proporciona detalles adicionales que pueden guiar a ChatGPT.</small>
                 </div>
                 
                 <div class="mb-3">
                     <label for="formatRestrictions" class="form-label"><i class="fas fa-list-ul"></i> Restricciones obligatorias del formato:</label>
-                    <input type="text" class="form-control form-control-sm" id="formatRestrictions" name="formatRestrictions" required>
+                    <textarea type="text" class="form-control form-control-sm" id="formatRestrictions" name="formatRestrictions" required></textarea>
                     <small class="form-text text-muted">Establece las reglas específicas que la respuesta debe seguir.</small>
                     <div id="formatFields" style="display: none;"></div>
                 </div>
