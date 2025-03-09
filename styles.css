@@ -1,16 +1,132 @@
+:root {
+    --primary-color: #4361ee;
+    --primary-hover: #3a56d4;
+    --secondary-color: #3f37c9;
+    --accent-color: #4cc9f0;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --dark-bg: #121212;
+    --light-bg: #f8f9fa;
+    --card-bg-dark: #1e1e1e;
+    --card-bg-light: #ffffff;
+    --text-light: #f8f9fa;
+    --text-dark: #212529;
+    --border-radius: 12px;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --ai-gradient-start: var(--primary-color);
+    --ai-gradient-end: var(--secondary-color);
+    --ai-highlight: rgba(67, 97, 238, 0.1);
+}
+
+body {
+    transition: background-color 0.3s ease;
+    padding-bottom: 2rem;
+}
+
+.header-banner {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
 
 .output-container {
     white-space: pre-wrap; /* Mantener los saltos de línea */
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    font-family: 'Courier New', monospace;
+    min-height: 150px;
+    transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] .output-container {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Mejora visual para el contenedor de resultados cuando está vacío */
+.output-container:empty::before {
+    content: "El resultado se mostrará aquí";
+    color: #999;
+    font-style: italic;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .form-container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
+    padding: 0;
+}
+
+.form-section {
+    background-color: var(--card-bg-light);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animación al hacer hover sobre form-section */
+.form-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.form-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+    opacity: 0;
+}
+
+.form-section:hover::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
+/* Efecto adicional para secciones con contenido activo */
+.form-section:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+/* Animación especial para la sección de resultado */
+.form-section:last-child:hover {
+    background-image: linear-gradient(to bottom, var(--card-bg-light), rgba(67, 97, 238, 0.03));
+}
+
+[data-bs-theme="dark"] .form-section:last-child:hover {
+    background-image: linear-gradient(to bottom, var(--card-bg-dark), rgba(76, 201, 240, 0.05));
+}
+
+[data-bs-theme="dark"] .form-section {
+    background-color: var(--card-bg-dark);
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
 .form-label-lg {
     font-size: 1.25rem;
     font-weight: 600;
+    color: var(--primary-color);
 }
 
 .placeholder {
@@ -20,7 +136,639 @@
 .slider-value {
     font-size: 1rem;
     font-weight: 600;
+    color: var(--primary-color);
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
 }
 
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
 
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
 
+.card {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.card-header {
+    border-bottom: none;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+textarea.form-control, input.form-control {
+    border-radius: 8px;
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+[data-bs-theme="dark"] textarea.form-control,
+[data-bs-theme="dark"] input.form-control {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+textarea.form-control:focus, input.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-range::-webkit-slider-thumb {
+    background: var(--primary-color);
+}
+
+.form-range::-moz-range-thumb {
+    background: var(--primary-color);
+}
+
+/* Mejoras para botones de acción */
+.action-buttons {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    flex: 1;
+    min-width: 200px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    border: none;
+    height: 60px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+}
+
+.btn-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+}
+
+.btn-action .btn-content,
+.btn-action .btn-hover-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-action .btn-hover-content {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.btn-action:hover .btn-content {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.btn-action:hover .btn-hover-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-action i {
+    font-size: 1.3rem; /* Aumentado el tamaño de los iconos */
+}
+
+.btn-generate {
+    background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+    color: white;
+}
+
+.btn-generate:hover {
+    background: linear-gradient(135deg, #2a6bc5, #00c2ff);
+}
+
+.btn-copy {
+    background: linear-gradient(135deg, #3a7bd5, #4cc9f0);
+    color: white;
+}
+
+.btn-copy:hover {
+    background: linear-gradient(135deg, #2a6bc5, #3ab8df);
+}
+
+.btn-clean {
+    background: linear-gradient(135deg, #3a7bd5, #8860d0);
+    color: white;
+}
+
+.btn-clean:hover {
+    background: linear-gradient(135deg, #2a6bc5, #7550c0);
+}
+
+.btn-action:disabled, 
+.btn-action:disabled:hover {
+    background: linear-gradient(135deg, #a0a0a0, #c0c0c0);
+    cursor: not-allowed;
+    transform: none;
+    opacity: 0.7;
+    box-shadow: none;
+}
+
+.btn-action:disabled .btn-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-action:disabled:hover .btn-hover-content {
+    opacity: 0;
+}
+
+.btn-action:disabled:hover .btn-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .form-section-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.form-section-header i {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+    color: var(--primary-color);
+}
+
+.form-section-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.alert {
+    animation: fadeIn 0.5s ease forwards;
+    border-radius: var(--border-radius);
+    border: none;
+}
+
+.alert-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--success-color);
+}
+
+.alert-warning {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--warning-color);
+}
+
+[data-bs-theme="dark"] .alert-success {
+    background-color: rgba(76, 175, 80, 0.2);
+}
+
+[data-bs-theme="dark"] .alert-warning {
+    background-color: rgba(255, 152, 0, 0.2);
+}
+
+/* Destacar la sección de IA */
+.ai-section {
+    background: linear-gradient(135deg, var(--ai-gradient-start), var(--ai-gradient-end));
+    border-radius: var(--border-radius);
+    padding: 0;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.ai-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://cdn.jsdelivr.net/gh/rubarez/prompt-assets@main/ai-pattern.svg');
+    background-size: cover;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.ai-section .form-section-header {
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: none;
+    padding: 1.5rem;
+    color: white;
+    margin-bottom: 0;
+}
+
+.ai-section .form-section-header i {
+    color: white;
+    font-size: 1.75rem;
+    background: rgba(255, 255, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 1rem;
+}
+
+.ai-section .form-section-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.ai-section .ai-content {
+    background: var(--card-bg-light);
+    padding: 1.5rem;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+[data-bs-theme="dark"] .ai-section .ai-content {
+    background-color: var(--card-bg-dark);
+}
+
+.ai-description {
+    max-width: 80%;
+    margin-bottom: 1.5rem;
+}
+
+.ai-input-area {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.ai-input-area:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Efectos de hover para el botón de generar prompt */
+#generatePromptBtn {
+    background-image: linear-gradient(135deg, #3a7bd5, #00d2ff);
+    color: white;
+    height: 60px;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1.15rem; /* Ligeramente más grande que los otros botones */
+}
+
+#generatePromptBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s;
+}
+
+#generatePromptBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+}
+
+#generatePromptBtn:hover::before {
+    left: 100%;
+}
+
+#generatePromptBtn i {
+    font-size: 1.35rem; /* Iconos más grandes para este botón */
+}
+
+/* Destacar campos de texto en la sección AI */
+.ai-section textarea.form-control {
+    border-width: 2px;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+[data-bs-theme="dark"] .ai-section textarea.form-control {
+    background-color: rgba(30, 30, 30, 0.95);
+}
+
+.ai-section textarea.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+/* Status de generación */
+#generationStatus {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+}
+
+[data-bs-theme="dark"] #generationStatus {
+    background-color: rgba(30, 30, 30, 0.9);
+}
+
+/* Efectos visuales para la sección AI */
+.highlight-pulse {
+    animation: pulsate 2s ease-out;
+}
+
+@keyframes pulsate {
+    0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
+    50% { box-shadow: 0 0 0 20px rgba(67, 97, 238, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+}
+
+/* Animaciones para los botones de acción */
+@keyframes btn-generate-success {
+    0% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(58, 123, 213, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0); }
+}
+
+.btn-generate-active {
+    animation: btn-generate-success 1s;
+}
+
+@keyframes btn-clean-animation {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(0); }
+    75% { transform: rotate(-5deg); }
+    100% { transform: rotate(0); }
+}
+
+.btn-clean-active {
+    animation: btn-clean-animation 0.5s;
+}
+
+/* Animación para el botón Copy cuando se activa */
+@keyframes pulse-success {
+    0% { box-shadow: 0 0 0 0 rgba(56, 239, 125, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(56, 239, 125, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(56, 239, 125, 0); }
+}
+
+.btn-copy-success {
+    animation: pulse-success 1.5s;
+}
+
+/* Estilo para el formulario cuando se está enviando */
+.form-submitting {
+    position: relative;
+}
+
+.form-submitting::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 10;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+[data-bs-theme="dark"] .form-submitting::after {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .action-buttons .btn-action {
+        flex: none;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        min-height: 60px;
+    }
+
+    /* Remove duplicate rules and old btn class reference */
+    /* .action-buttons .btn {
+        flex: 100%;
+    } */
+    
+    /* Ensure consistent height on mobile */
+    .btn-content, .btn-hover-content {
+        height: 100%;
+    }
+    
+    /* Make sure text doesn't overflow on smaller screens */
+    .btn-action span {
+        font-size: 1.05rem; /* Aumentar tamaño en móvil, pero no tanto como en desktop */
+    }
+    
+    /* Add more space for the shadow effect */
+    .form-section:last-child {
+        margin-bottom: 3rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 576px) {
+    .btn-action {
+        height: 50px; /* Smaller height on very small screens */
+    }
+    
+    .btn-action span {
+        font-size: 1rem; /* Mantener un tamaño legible en pantallas muy pequeñas */
+    }
+    
+    .btn-action i {
+        font-size: 1.2rem;
+    }
+}
+
+/* Unificación de estilos de botones */
+.btn-primary,
+#generatePromptBtn,
+.btn-action {
+    border: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem; /* Aumentado el tamaño de fuente base de los botones */
+}
+
+.btn-primary:hover,
+#generatePromptBtn:hover,
+.btn-action:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active,
+#generatePromptBtn:active,
+.btn-action:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Efectos de hover para todos los botones principales */
+.btn-primary::before,
+#generatePromptBtn::before,
+.btn-action::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s;
+}
+
+.btn-primary:hover::before,
+#generatePromptBtn:hover::before,
+.btn-action:hover::before {
+    left: 100%;
+}
+
+/* Armonización de gradientes para todos los botones */
+#generatePromptBtn {
+    background-image: linear-gradient(135deg, #3a7bd5, #00d2ff);
+    color: white;
+    height: 60px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.15rem; /* Ligeramente más grande que los otros botones */
+}
+
+#generatePromptBtn:hover {
+    background-image: linear-gradient(135deg, #2a6bc5, #00c2ff);
+}
+
+/* Redefinir colores de botones para que coincidan mejor */
+.btn-generate {
+    background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+    color: white;
+}
+
+.btn-generate:hover {
+    background: linear-gradient(135deg, #2a6bc5, #00c2ff);
+}
+
+.btn-copy {
+    background: linear-gradient(135deg, #3a7bd5, #4cc9f0);
+    color: white;
+}
+
+.btn-copy:hover {
+    background: linear-gradient(135deg, #2a6bc5, #3ab8df);
+}
+
+.btn-clean {
+    background: linear-gradient(135deg, #3a7bd5, #8860d0);
+    color: white;
+}
+
+.btn-clean:hover {
+    background: linear-gradient(135deg, #2a6bc5, #7550c0);
+}
+
+/* Animaciones para todos los botones */
+@keyframes button-glow {
+    0% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(58, 123, 213, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0); }
+}
+
+.btn-primary:focus,
+#generatePromptBtn:focus,
+.btn-generate-active {
+    animation: button-glow 1s;
+}
+
+/* Animaciones para el panel de opciones avanzadas */
+#advancedOptions {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s ease, opacity 0.5s ease, transform 0.4s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+#advancedOptions.show {
+    max-height: 3000px; /* Altura suficiente para mostrar todo el contenido */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animación para el botón de toggle */
+#toggleAdvancedOptions {
+    transition: all 0.3s ease;
+}
+
+#toggleAdvancedOptions.expanded {
+    background-color: rgba(67, 97, 238, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+#toggleAdvancedOptions i {
+    transition: transform 0.4s ease;
+}
+
+#toggleAdvancedOptions.expanded i {
+    transform: rotate(180deg);
+}

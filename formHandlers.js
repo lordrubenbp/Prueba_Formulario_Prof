@@ -4,6 +4,14 @@ function initializeFormHandlers() {
     document.getElementById('preconfig').addEventListener('change', handlePreconfigChange);
     document.getElementById('infoForm').addEventListener('submit', handleSubmit);
     document.getElementById('additionalGuidanceCheckbox').addEventListener('change', handleAdditionalGuidanceChange);
+    
+    // Add animation class to form sections for fade-in effect
+    document.querySelectorAll('.form-section').forEach((section, index) => {
+        section.style.opacity = '0';
+        section.style.animation = `fadeIn 0.5s ease forwards ${0.1 * index}s`;
+    });
+
+    initializeButtonEffects();
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -22,14 +30,14 @@ function checkOutputContainer() {
 
     if (text === '') {
         copyButton.disabled = true;
-        copyButton.className = 'btn btn-secondary btn-lg mr-2';
+        copyButton.classList.add('disabled');
         cleanButton.disabled = true;
-        cleanButton.className = 'btn btn-secondary btn-lg mr-2';
+        cleanButton.classList.add('disabled');
     } else {
         copyButton.disabled = false;
-        copyButton.className = 'btn btn-primary btn-lg mr-2';
+        copyButton.classList.remove('disabled');
         cleanButton.disabled = false;
-        cleanButton.className = 'btn btn-primary btn-lg mr-2';
+        cleanButton.classList.remove('disabled');
     }
 }
 
@@ -106,19 +114,39 @@ function handlePreconfigChange() {
 function createDynamicFields(fieldType, template, container) {
     const matches = template.match(/{{(.*?)}}/g);
     if (matches) {
+        const fieldGroup = document.createElement('div');
+        fieldGroup.className = 'dynamic-fields p-3 border rounded bg-light';
+        
+        // Add header for dynamic fields
+        const header = document.createElement('h6');
+        header.className = 'mb-3 text-primary';
+        header.innerHTML = '<i class="fas fa-edit me-2"></i>Complete los campos a continuación:';
+        fieldGroup.appendChild(header);
+        
+        // Create fields
         matches.forEach(match => {
             const cleanText = match.replace(/{{|}}/g, '').trim();
+            const fieldContainer = document.createElement('div');
+            fieldContainer.className = 'mb-3';
+            
+            const label = document.createElement('label');
+            label.className = 'form-label';
+            label.textContent = cleanText.split(":")[0].trim();
+            
             const input = document.createElement('input');
             input.type = cleanText.split(":")[1].trim();
-            input.className = 'form-control form-control-sm mt-2';
-            input.placeholder = cleanText.split(":")[0].trim();;
+            input.className = 'form-control mb-2';
+            input.placeholder = `Introduzca ${cleanText.split(":")[0].trim()}...`;
             input.dataset.template = match;
-            container.appendChild(input);
+            
+            fieldContainer.appendChild(label);
+            fieldContainer.appendChild(input);
+            fieldGroup.appendChild(fieldContainer);
         });
+        
+        container.appendChild(fieldGroup);
     }
 }
-
-
 
 function handleAdditionalGuidanceChange() {
     const additionalGuidance = document.getElementById('additionalGuidance');
@@ -195,24 +223,67 @@ function replacePlaceholders(template, containerId) {
     return template;
 }
 
-
-
 function copyText() {
     const outputContainer = document.getElementById('outputContainer');
-    const text = outputContainer.innerText.trim(); // Eliminar espacios en blanco
+    const text = outputContainer.innerText.trim();
+    const copyButton = document.getElementById('copyButton');
 
     if (text === '') {
-        return; // No copiar ni mostrar mensajes si no hay texto
+        return;
     }
 
     navigator.clipboard.writeText(text).then(() => {
-        alert('Texto copiado al portapapeles');
+        // Cambiar temporalmente el botón para dar feedback visual
+        const originalContent = copyButton.querySelector('.btn-content').innerHTML;
+        copyButton.querySelector('.btn-content').innerHTML = '<i class="fas fa-check me-2"></i><span>¡Copiado!</span>';
+        copyButton.classList.add('btn-copy-success');
+        
+        setTimeout(() => {
+            copyButton.querySelector('.btn-content').innerHTML = originalContent;
+            copyButton.classList.remove('btn-copy-success');
+        }, 2000);
+        
+        // Notificación estilo toast
+        const toastEl = document.createElement('div');
+        toastEl.className = 'position-fixed bottom-0 end-0 p-3';
+        toastEl.style.zIndex = '5';
+        toastEl.innerHTML = `
+            <div id="copyToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas fa-check-circle me-2"></i>Texto copiado al portapapeles
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(toastEl);
+        
+        const toast = new bootstrap.Toast(document.getElementById('copyToast'));
+        toast.show();
+        
+        // Remove toast element after it's hidden
+        setTimeout(() => {
+            document.body.removeChild(toastEl);
+        }, 3000);
     }).catch(err => {
         console.error('Error al copiar el texto: ', err);
+        alert('Error al copiar al portapapeles: ' + err);
     });
 }
 
 function resetForm() {
+    // Mostrar confirmación solo si hay contenido
+    if (document.getElementById('outputContainer').innerText.trim() !== '') {
+        if (!confirm('¿Estás seguro de que deseas limpiar todos los campos?')) {
+            return;
+        }
+    }
+    
+    // Añadir animación de limpieza
+    const cleanButton = document.getElementById('cleanButton');
+    cleanButton.classList.add('btn-clean-active');
+    
     document.getElementById('infoForm').reset();
     document.getElementById('outputContainer').innerText = '';
 
@@ -233,7 +304,16 @@ function resetForm() {
             element.readOnly = false;
         }
     });
+    
+    // Desactivar los botones
+    checkOutputContainer();
+    
+    // Eliminar la clase activa después de la animación
+    setTimeout(() => {
+        cleanButton.classList.remove('btn-clean-active');
+    }, 500);
 }
+
 function allRequiredFieldsFilled() {
     const roleFields = document.getElementById('roleFields');
     const actionFields = document.getElementById('actionFields');
@@ -242,4 +322,22 @@ function allRequiredFieldsFilled() {
 
     const allFields = [...roleFields.querySelectorAll('input'), ...conditionsFields.querySelectorAll('input'), ...formatFields.querySelectorAll('input'), ...actionFields.querySelectorAll('input')];
     return allFields.every(input => input.value.trim() !== '');
+}
+
+// Añadir efectos visuales al botón de generar texto
+function initializeButtonEffects() {
+    const generateButton = document.getElementById('generateButton');
+    
+    if (generateButton) {
+        generateButton.addEventListener('click', function() {
+            // La animación se disparará con CSS cuando el formulario sea válido
+            if (allRequiredFieldsFilled()) {
+                this.classList.add('btn-generate-active');
+                
+                setTimeout(() => {
+                    this.classList.remove('btn-generate-active');
+                }, 1000);
+            }
+        });
+    }
 }
