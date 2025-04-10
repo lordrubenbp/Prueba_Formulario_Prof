@@ -160,6 +160,11 @@
                     
                     <!-- Cambiar el estilo de display a clase CSS para permitir animación -->
                     <div id="advancedOptions" class="mt-4">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Estos parámetros solo tendrán efecto cuando uses la API de OpenAI directamente. En la interfaz web de ChatGPT, puedes mencionar estos ajustes como instrucciones textuales.
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <div class="card h-100">
@@ -173,7 +178,7 @@
                                                 <input type="range" class="form-range flex-grow-1" id="temperature" name="temperature" step="0.1" min="0" max="1" disabled>
                                                 <div id="temperatureValue" class="slider-value ms-2">0.0</div>
                                             </div>
-                                            <small class="form-text text-muted">Define el nivel de creatividad. Mayor valor = más creatividad.</small>
+                                            <small class="form-text text-muted">Define el nivel de creatividad. Mayor valor = más creatividad. Parámetro oficial de la API de OpenAI.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -183,48 +188,12 @@
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <div class="form-check form-switch">
-                                            <input role="switch" type="checkbox" class="form-check-input" id="diversityPenaltyCheckbox">
-                                            <label for="diversityPenalty" class="form-check-label fw-bold">
-                                                <i class="fas fa-random text-primary me-2"></i>Diversidad:
-                                            </label>
-                                            <div class="d-flex align-items-center mt-2">
-                                                <input type="range" class="form-range flex-grow-1" id="diversityPenalty" name="diversityPenalty" step="0.1" min="0" max="2" disabled>
-                                                <div id="diversityPenaltyValue" class="slider-value ms-2">0.0</div>
-                                            </div>
-                                            <small class="form-text text-muted">Mayor valor = respuestas más variadas.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check form-switch">
                                             <input role="switch" type="checkbox" class="form-check-input" id="maxTokensCheckbox">
                                             <label for="maxTokens" class="form-check-label fw-bold">
-                                                <i class="fas fa-file-word text-primary me-2"></i>Número máximo de palabras:
+                                                <i class="fas fa-file-word text-primary me-2"></i>Máximo de tokens:
                                             </label>
                                             <input type="number" class="form-control form-control-sm mt-2" id="maxTokens" name="maxTokens" disabled>
-                                            <small class="form-text text-muted">Establece el número máximo de palabras que la respuesta puede tener.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check form-switch">
-                                            <input role="switch" type="checkbox" class="form-check-input" id="topKCheckbox">
-                                            <label for="topK" class="form-check-label fw-bold">
-                                                <i class="fas fa-sort-numeric-up-alt text-primary me-2"></i>Top-k:
-                                            </label>
-                                            <div class="d-flex align-items-center mt-2">
-                                                <input type="range" class="form-range flex-grow-1" id="topK" name="topK" min="1" max="100" disabled>
-                                                <div id="topKValue" class="slider-value ms-2">1</div>
-                                            </div>
-                                            <small class="form-text text-muted">Limita la selección de palabras a las 'k' más probables durante la generación de texto. Un valor más bajo hace las respuestas más predecibles. Rango típico: 1 a 100</small>
+                                            <small class="form-text text-muted">Establece el número máximo de tokens (fragmentos de palabras) que la respuesta puede tener. Parámetro oficial de la API de OpenAI.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -242,7 +211,25 @@
                                                 <input type="range" class="form-range flex-grow-1" id="topP" name="topP" step="0.1" min="0" max="1" disabled>
                                                 <div id="topPValue" class="slider-value ms-2">0.0</div>
                                             </div>
-                                            <small class="form-text text-muted">Selecciona el conjunto más pequeño de palabras cuya probabilidad acumulada supera un valor 'p'. Un valor más alto da respuestas más variadas. Rango típico: 0.0 a 1.0</small>
+                                            <small class="form-text text-muted">Selecciona palabras cuya probabilidad acumulada supera un valor 'p'. Un valor más alto da respuestas más variadas. Parámetro oficial de la API de OpenAI.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="form-check form-switch">
+                                            <input role="switch" type="checkbox" class="form-check-input" id="diversityPenaltyCheckbox">
+                                            <label for="diversityPenalty" class="form-check-label fw-bold">
+                                                <i class="fas fa-random text-primary me-2"></i>Presence Penalty:
+                                            </label>
+                                            <div class="d-flex align-items-center mt-2">
+                                                <input type="range" class="form-range flex-grow-1" id="diversityPenalty" name="diversityPenalty" step="0.1" min="0" max="2" disabled>
+                                                <div id="diversityPenaltyValue" class="slider-value ms-2">0.0</div>
+                                            </div>
+                                            <small class="form-text text-muted">Penaliza los temas que ya han aparecido. Mayor valor = más diversidad temática. Equivalente a presence_penalty en la API de OpenAI.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -254,49 +241,13 @@
                                         <div class="form-check form-switch">
                                             <input role="switch" type="checkbox" class="form-check-input" id="repetitionPenaltyCheckbox">
                                             <label for="repetitionPenalty" class="form-check-label fw-bold">
-                                                <i class="fas fa-redo-alt text-primary me-2"></i>Penalización por repetición:
+                                                <i class="fas fa-redo-alt text-primary me-2"></i>Frequency Penalty:
                                             </label>
                                             <div class="d-flex align-items-center mt-2">
-                                                <input type="range" class="form-range flex-grow-1" id="repetitionPenalty" name="repetitionPenalty" step="0.1" min="1" max="2" disabled>
-                                                <div id="repetitionPenaltyValue" class="slider-value ms-2">1.0</div>
+                                                <input type="range" class="form-range flex-grow-1" id="repetitionPenalty" name="repetitionPenalty" step="0.1" min="0" max="2" disabled>
+                                                <div id="repetitionPenaltyValue" class="slider-value ms-2">0.0</div>
                                             </div>
-                                            <small class="form-text text-muted">Penaliza la repetición de palabras y frases en la respuesta. Un valor más alto reduce la repetición. Rango típico: 1.0 a 2.0</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check form-switch">
-                                            <input role="switch" type="checkbox" class="form-check-input" id="lengthPenaltyCheckbox">
-                                            <label for="lengthPenalty" class="form-check-label fw-bold">
-                                                <i class="fas fa-text-height text-primary me-2"></i>Penalización por longitud:
-                                            </label>
-                                            <div class="d-flex align-items-center mt-2">
-                                                <input type="range" class="form-range flex-grow-1" id="lengthPenalty" name="lengthPenalty" step="0.01" min="0" max="2" disabled>
-                                                <div id="lengthPenaltyValue" class="slider-value ms-2">0.0</div>
-                                            </div>
-                                            <small class="form-text text-muted">Ajusta la preferencia por respuestas más cortas o más largas. Un valor más alto favorece respuestas más largas. Rango típico: 0.0 a 2.0</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="form-check form-switch">
-                                            <input role="switch" type="checkbox" class="form-check-input" id="promptImportanceCheckbox">
-                                            <label for="promptImportance" class="form-check-label fw-bold">
-                                                <i class="fas fa-exclamation-circle text-primary me-2"></i>Prompt Importance (Importancia del Prompt):
-                                            </label>
-                                            <div class="d-flex align-items-center mt-2">
-                                                <input type="range" class="form-range flex-grow-1" id="promptImportance" name="promptImportance" step="0.1" min="0" max="5" disabled>
-                                                <div id="promptImportanceValue" class="slider-value ms-2">0.0</div>
-                                            </div>
-                                            <small class="form-text text-muted">Ajusta la influencia del texto de entrada (prompt) en las respuestas generadas. Rango típico: 0.0 a 5.0</small>
+                                            <small class="form-text text-muted">Penaliza la repetición de palabras específicas. Mayor valor = menos repetición de palabras. Equivalente a frequency_penalty en la API de OpenAI.</small>
                                         </div>
                                     </div>
                                 </div>
@@ -324,6 +275,16 @@
                                 <span>¡Crear ahora!</span>
                             </div>
                         </button>
+                        <button id="evaluateButton" type="button" class="btn-action btn-evaluate" disabled>
+                            <div class="btn-content">
+                                <i class="fas fa-award me-2"></i>
+                                <span>Valorar el prompt</span>
+                            </div>
+                            <div class="btn-hover-content">
+                                <i class="fas fa-star me-2"></i>
+                                <span>¡Analizar calidad!</span>
+                            </div>
+                        </button>
                         <button id="copyButton" type="button" class="btn-action btn-copy" onclick="copyText()" disabled>
                             <div class="btn-content">
                                 <i class="fas fa-copy me-2"></i>
@@ -344,15 +305,32 @@
                                 <span>¡Reiniciar todo!</span>
                             </div>
                         </button>
+                        <button id="testPromptButton" type="button" class="btn-action btn-test">
+                            <div class="btn-content">
+                                <i class="fas fa-play me-2"></i>
+                                <span>Probar en ChatGPT</span>
+                            </div>
+                            <div class="btn-hover-content">
+                                <i class="fas fa-rocket me-2"></i>
+                                <span>¡Ejecutar ahora!</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
     
+    <!-- Footer -->
+    <footer class="container mt-5 mb-4 text-center text-muted">
+        <hr>
+        <small>Generador de Prompts para ChatGPT &copy; 2025</small>
+    </footer>
+    
     <script src="main.js"></script>
     <script src="advancedOptions.js"></script>
     <script src="formHandlers.js"></script>
     <script src="aiPromptGenerator.js"></script>
+    <script src="chatgptIntegration.js"></script>
 </body>
 </html>

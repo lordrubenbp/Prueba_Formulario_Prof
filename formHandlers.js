@@ -1,9 +1,10 @@
-const fields = ['role', 'action', 'conditions', 'additionalGuidance', 'formatRestrictions', 'temperature', 'diversityPenalty', 'topK', 'topP', 'repetitionPenalty', 'lengthPenalty', 'promptImportance', 'maxTokens'];
+const fields = ['role', 'action', 'conditions', 'additionalGuidance', 'formatRestrictions', 'temperature', 'diversityPenalty', 'topP', 'repetitionPenalty', 'maxTokens'];
 
 function initializeFormHandlers() {
     document.getElementById('preconfig').addEventListener('change', handlePreconfigChange);
     document.getElementById('infoForm').addEventListener('submit', handleSubmit);
     document.getElementById('additionalGuidanceCheckbox').addEventListener('change', handleAdditionalGuidanceChange);
+    document.getElementById('evaluateButton').addEventListener('click', handleEvaluatePrompt);
     
     // Add animation class to form sections for fade-in effect
     document.querySelectorAll('.form-section').forEach((section, index) => {
@@ -26,6 +27,7 @@ function checkOutputContainer() {
     const outputContainer = document.getElementById('outputContainer');
     const copyButton = document.getElementById('copyButton');
     const cleanButton = document.getElementById('cleanButton');
+    const evaluateButton = document.getElementById('evaluateButton');
     const text = outputContainer.innerText.trim();
 
     if (text === '') {
@@ -33,11 +35,15 @@ function checkOutputContainer() {
         copyButton.classList.add('disabled');
         cleanButton.disabled = true;
         cleanButton.classList.add('disabled');
+        evaluateButton.disabled = true;
+        evaluateButton.classList.add('disabled');
     } else {
         copyButton.disabled = false;
         copyButton.classList.remove('disabled');
         cleanButton.disabled = false;
         cleanButton.classList.remove('disabled');
+        evaluateButton.disabled = false;
+        evaluateButton.classList.remove('disabled');
     }
 }
 
@@ -168,14 +174,11 @@ function handleSubmit(event) {
     let outputText = generateOutputText(preconfig);
 
     const advancedFields = [
-        { checkbox: 'temperatureCheckbox', field: 'temperature', label: 'Grado de temperatura' },
-        { checkbox: 'diversityPenaltyCheckbox', field: 'diversityPenalty', label: 'Diversity Penalty' },
+        { checkbox: 'temperatureCheckbox', field: 'temperature', label: 'Temperatura' },
+        { checkbox: 'diversityPenaltyCheckbox', field: 'diversityPenalty', label: 'Presence Penalty' },
         { checkbox: 'maxTokensCheckbox', field: 'maxTokens', label: 'Max Tokens' },
-        { checkbox: 'topKCheckbox', field: 'topK', label: 'Top-k' },
         { checkbox: 'topPCheckbox', field: 'topP', label: 'Top-p' },
-        { checkbox: 'repetitionPenaltyCheckbox', field: 'repetitionPenalty', label: 'Repetition Penalty' },
-        { checkbox: 'lengthPenaltyCheckbox', field: 'lengthPenalty', label: 'Length Penalty' },
-        { checkbox: 'promptImportanceCheckbox', field: 'promptImportance', label: 'Prompt Importance' }
+        { checkbox: 'repetitionPenaltyCheckbox', field: 'repetitionPenalty', label: 'Frequency Penalty' }
     ];
 
     advancedFields.forEach(({ checkbox, field, label }) => {
@@ -340,4 +343,145 @@ function initializeButtonEffects() {
             }
         });
     }
+}
+
+function handleEvaluatePrompt() {
+    const outputContainer = document.getElementById('outputContainer');
+    const promptText = outputContainer.innerText.trim();
+    const evaluateButton = document.getElementById('evaluateButton');
+    
+    if (!promptText) {
+        alert('No hay ningún prompt generado para evaluar.');
+        return;
+    }
+    
+    // Mostrar un indicador de carga
+    const originalContent = evaluateButton.querySelector('.btn-content').innerHTML;
+    evaluateButton.querySelector('.btn-content').innerHTML = '<div class="spinner-border spinner-border-sm text-light me-2" role="status"><span class="visually-hidden">Cargando...</span></div><span>Evaluando...</span>';
+    evaluateButton.disabled = true;
+    
+    // Obtener la API key que el usuario ingresó para la generación automática
+    const apiKey = document.getElementById('apiKey').value;
+    
+    if (!apiKey || !apiKey.startsWith('sk-')) {
+        alert('Por favor, ingrese una API key válida de OpenAI para evaluar el prompt.');
+        
+        // Restaurar el botón
+        evaluateButton.querySelector('.btn-content').innerHTML = originalContent;
+        evaluateButton.disabled = false;
+        return;
+    }
+
+    // Preparar la evaluación
+    const promptToEvaluate = {
+        model: "gpt-4",
+        messages: [
+            {
+                role: "system",
+                content: "Eres un ingeniero experto en la redacción de prompts eficientes para IA. Tu trabajo es evaluar prompts y proporcionar retroalimentación constructiva para mejorarlos. Analiza el prompt considerando su claridad, estructura, especificidad, posibles ambigüedades y áreas de mejora. Da una calificación general del 1 al 10 y sugiere cambios concretos que mejoren su eficacia."
+            },
+            {
+                role: "user",
+                content: `Por favor, evalúa este prompt y sugiere mejoras:\n\n${promptText}`
+            }
+        ]
+    };
+    
+    // Realizar la solicitud a la API de OpenAI
+    fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(promptToEvaluate)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Mostrar la evaluación en una ventana modal
+        displayEvaluation(data.choices[0].message.content);
+    })
+    .catch(error => {
+        console.error('Error al evaluar el prompt:', error);
+        alert(`Error al evaluar el prompt: ${error.message}`);
+    })
+    .finally(() => {
+        // Restaurar el botón
+        evaluateButton.querySelector('.btn-content').innerHTML = originalContent;
+        evaluateButton.disabled = false;
+    });
+}
+
+function displayEvaluation(evaluationText) {
+    // Crear modal para mostrar la evaluación
+    const modalEl = document.createElement('div');
+    modalEl.className = 'modal fade';
+    modalEl.id = 'evaluationModal';
+    modalEl.tabIndex = '-1';
+    modalEl.setAttribute('aria-labelledby', 'evaluationModalLabel');
+    modalEl.setAttribute('aria-hidden', 'true');
+    
+    // Estructurar el contenido de la evaluación (formato markdown)
+    // Convertimos los saltos de línea en etiquetas <br>
+    const formattedText = evaluationText
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Negrita
+        .replace(/\*(.*?)\*/g, '<em>$1</em>') // Cursiva
+        .replace(/\n\n/g, '</p><p>') // Párrafos
+        .replace(/\n/g, '<br>'); // Saltos de línea
+    
+    modalEl.innerHTML = `
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="evaluationModalLabel">
+                        <i class="fas fa-star me-2"></i>Evaluación del Prompt
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="evaluation-content">
+                        <p>${formattedText}</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="copyEvaluationBtn">
+                        <i class="fas fa-copy me-2"></i>Copiar evaluación
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modalEl);
+    
+    // Mostrar el modal
+    const evaluationModal = new bootstrap.Modal(document.getElementById('evaluationModal'));
+    evaluationModal.show();
+    
+    // Configurar el botón para copiar la evaluación
+    document.getElementById('copyEvaluationBtn').addEventListener('click', () => {
+        navigator.clipboard.writeText(evaluationText)
+            .then(() => {
+                // Cambiar temporalmente el botón para dar feedback visual
+                const copyBtn = document.getElementById('copyEvaluationBtn');
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check me-2"></i>¡Copiado!';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                }, 2000);
+            })
+            .catch(err => console.error('Error al copiar la evaluación:', err));
+    });
+    
+    // Eliminar el modal del DOM cuando se cierre
+    document.getElementById('evaluationModal').addEventListener('hidden.bs.modal', function () {
+        document.body.removeChild(document.getElementById('evaluationModal'));
+    });
 }
