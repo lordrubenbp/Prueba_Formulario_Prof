@@ -72,10 +72,11 @@ function handlePreconfigChange() {
     const formatFields = document.getElementById('formatFields');
     const actionFields = document.getElementById('actionFields');
 
-    roleFields.innerHTML = ''; // Limpiar campos
-    conditionsFields.innerHTML = ''; // Limpiar campos
-    formatFields.innerHTML = ''; // Limpiar campos
-    actionFields.innerHTML = ''; // Limpiar campos
+    // Limpiar campos dinámicos
+    roleFields.innerHTML = '';
+    conditionsFields.innerHTML = '';
+    formatFields.innerHTML = '';
+    actionFields.innerHTML = '';
 
     if (preconfig && window.preconfigurations && window.preconfigurations[preconfig]) {
         const config = window.preconfigurations[preconfig];
@@ -84,6 +85,7 @@ function handlePreconfigChange() {
 
         activateAdvancedFields(config);
 
+        // Aplicar valores a campos ocultos
         fields.forEach(field => {
             if (config[field] !== undefined) {
                 const element = document.getElementById(field);
@@ -95,29 +97,47 @@ function handlePreconfigChange() {
         });
 
         if (config.additionalGuidance !== undefined) {
-            console.log
             document.getElementById('additionalGuidanceCheckbox').checked = true;
-        }else{
-
-            document.getElementById('additionalGuidance').value ='';
+        } else {
+            document.getElementById('additionalGuidance').value = '';
             document.getElementById('additionalGuidanceCheckbox').checked = false;
         }
 
-        // Crear campos dinámicos
+        // Crear campos dinámicos primero
         createDynamicFields('role', config.role, roleFields);
         createDynamicFields('conditions', config.conditions, conditionsFields);
         createDynamicFields('formatRestrictions', config.formatRestrictions, formatFields);
         createDynamicFields('action', config.action, actionFields);
 
+        // Mostrar contenedores de campos dinámicos
         roleFields.style.display = 'block';
         conditionsFields.style.display = 'block';
         formatFields.style.display = 'block';
         actionFields.style.display = 'block';
 
+        // Al final, ocultar los campos de texto originales
+        document.querySelectorAll('.form-main-field').forEach(section => {
+            // Ocultar solo los campos de texto, pero no sus contenedores de campos dinámicos
+            const textareas = section.querySelectorAll('textarea');
+            const labels = section.querySelectorAll('label:not([for^="roleFields"]):not([for^="actionFields"]):not([for^="conditionsFields"]):not([for^="formatFields"])');
+            const helpTexts = section.querySelectorAll('small:not(.dynamic-field-help)');
+            
+            textareas.forEach(el => el.style.display = 'none');
+            labels.forEach(el => el.style.display = 'none');
+            helpTexts.forEach(el => el.style.display = 'none');
+            
+            // Importante: NO ocultamos la sección completa para que los campos dinámicos sigan visibles
+        });
+
     } else {
+        // Restablecer la visualización normal cuando no hay plantilla seleccionada
+        document.querySelectorAll('.form-main-field').forEach(section => {
+            section.querySelectorAll('*').forEach(el => {
+                el.style.display = ''; // Restaurar a los valores por defecto
+            });
+        });
 
         resetForm();
-
     }
 }
 
@@ -125,7 +145,7 @@ function createDynamicFields(fieldType, template, container) {
     const matches = template.match(/{{(.*?)}}/g);
     if (matches) {
         const fieldGroup = document.createElement('div');
-        fieldGroup.className = 'dynamic-fields p-3 border rounded';
+        fieldGroup.className = 'dynamic-fields p-3 border rounded mb-4';
         
         // Añadir tema oscuro compatible
         if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
@@ -133,6 +153,34 @@ function createDynamicFields(fieldType, template, container) {
         } else {
             fieldGroup.classList.add('bg-light');
         }
+        
+        // Create a visual representation of the template with placeholder buttons
+        const templatePreview = document.createElement('div');
+        templatePreview.className = 'mb-4 p-3 border rounded bg-white text-dark';
+        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+            templatePreview.classList.remove('bg-white', 'text-dark');
+            templatePreview.classList.add('bg-dark', 'text-light');
+        }
+        
+        // Create template preview with non-interactive buttons
+        let previewHTML = template;
+        matches.forEach(match => {
+            const cleanText = match.replace(/{{|}}/g, '').trim();
+            const fieldName = cleanText.split(":")[0].trim();
+            const btnClass = document.documentElement.getAttribute('data-bs-theme') === 'dark' 
+                ? 'btn-outline-light' 
+                : 'btn-outline-primary';
+            previewHTML = previewHTML.replace(
+                match, 
+                `<span class="btn ${btnClass} btn-sm disabled mb-1 me-1" style="cursor: not-allowed; pointer-events: none;">${fieldName}</span>`
+            );
+        });
+        
+        templatePreview.innerHTML = `
+            <div class="mb-2"><small class="text-muted"><i class="fas fa-eye me-2"></i>Vista previa:</small></div>
+            <div>${previewHTML}</div>
+        `;
+        fieldGroup.appendChild(templatePreview);
         
         // Add header for dynamic fields
         const header = document.createElement('h6');
@@ -174,6 +222,9 @@ function createDynamicFields(fieldType, template, container) {
         });
         
         container.appendChild(fieldGroup);
+        
+        // Asegurarse de que el contenedor sea visible
+        container.style.display = 'block';
     }
 }
 
