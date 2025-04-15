@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Inicializa la funcionalidad de integración con ChatGPT
  */
-function initializeChatGPTIntegration() {
+export function initializeChatGPTIntegration() {
     const testPromptButton = document.getElementById('testPromptButton');
     
     if (testPromptButton) {

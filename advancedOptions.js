@@ -1,4 +1,4 @@
-function initializeAdvancedOptions() {
+export function initializeAdvancedOptions() {
     // Cache DOM elements
     const elements = {
         toggleBtn: document.getElementById('toggleAdvancedOptions'),
@@ -122,7 +122,7 @@ function toggleFieldState(fieldId, enabled) {
     }
 }
 
-function activateAdvancedFields(config) {
+export function activateAdvancedFields(config) {
     try {
         const advancedFields = [
             { field: 'temperature', value: config.temperature },
@@ -168,7 +168,7 @@ function activateAdvancedFields(config) {
     }
 }
 
-function deactivateAdvancedFields() {
+export function deactivateAdvancedFields() {
     try {
         const advancedFields = [
             'temperature',

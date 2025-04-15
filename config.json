@@ -40,6 +40,97 @@
       "repetitionPenalty": 1.2,
       "lengthPenalty": 0.0,
       "promptImportance": 1.0
+    },
+    "topicSummary": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Redacta un resumen claro y conciso sobre el/la {{Contexto:textarea}}",
+      "conditions": "El resumen debe abordar los puntos clave de la asignatura {{Nombre de la asignatura:text}}, correspondiente al {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de profundidad debe ser {{Nivel de profundidad:text}} y debe estar adaptado al nivel de los estudiantes.",
+      "formatRestrictions": "El resumen debe estar estructurado en párrafos breves y claros, con títulos si es necesario. El resultado debe mostrarse en texto plano.",
+      "temperature": 0.1,
+      "diversityPenalty": 0.2,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
+    },
+    "glossary": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Elabora un glosario de términos clave sobre el/la {{Contexto:textarea}}",
+      "conditions": "El glosario debe estar enfocado en la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de detalle debe ser {{Nivel de detalle:text}}.",
+      "formatRestrictions": "Incluye {{Número de términos:number}} términos. Cada término debe ir seguido de su definición clara y breve. El resultado debe mostrarse en formato de lista.",
+      "temperature": 0.1,
+      "diversityPenalty": 0.2,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
+    },
+    "discussionCase": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Redacta un caso práctico para discusión sobre el/la {{Contexto:textarea}}",
+      "conditions": "El caso debe estar relacionado con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de dificultad debe ser {{Nivel de dificultad:text}}.",
+      "formatRestrictions": "El caso debe incluir: Descripción del caso, Preguntas para la discusión (mínimo {{Número de preguntas:number}}), y Sugerencias para el docente. El resultado debe mostrarse en texto plano.",
+      "temperature": 0.2,
+      "diversityPenalty": 0.3,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
+    },
+    "conceptMap": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Elabora un esquema o mapa conceptual sobre el/la {{Contexto:textarea}}",
+      "conditions": "El esquema debe cubrir los conceptos principales de la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}.",
+      "formatRestrictions": "El esquema debe presentarse en formato de lista jerárquica o texto estructurado, mostrando relaciones entre conceptos. El resultado debe ser claro y visualmente organizado.",
+      "temperature": 0.1,
+      "diversityPenalty": 0.2,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
+    },
+    "learningObjectives": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Redacta una lista de objetivos de aprendizaje para el/la {{Contexto:textarea}}",
+      "conditions": "Los objetivos deben estar alineados con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}.",
+      "formatRestrictions": "Incluye {{Número de objetivos:number}} objetivos, redactados de forma clara y medible. El resultado debe mostrarse en formato de lista.",
+      "temperature": 0.1,
+      "diversityPenalty": 0.2,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
+    },
+    "collaborativeActivity": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Propón una actividad colaborativa sobre el/la {{Contexto:textarea}}",
+      "conditions": "La actividad debe estar relacionada con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. Debe fomentar el trabajo en equipo y la participación activa.",
+      "formatRestrictions": "Incluye: Descripción de la actividad, Objetivos, Roles sugeridos y Criterios de evaluación. El resultado debe mostrarse en texto plano.",
+      "temperature": 0.2,
+      "diversityPenalty": 0.3,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
+    },
+    "debateProposal": {
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
+      "action": "Propón un tema de debate sobre el/la {{Contexto:textarea}}",
+      "conditions": "El debate debe estar vinculado a la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El tema debe ser relevante y actual.",
+      "formatRestrictions": "Incluye: Enunciado del tema, Preguntas guía (mínimo {{Número de preguntas:number}}) y Sugerencias para la moderación. El resultado debe mostrarse en texto plano.",
+      "temperature": 0.2,
+      "diversityPenalty": 0.3,
+      "topK": 50,
+      "topP": 0.9,
+      "repetitionPenalty": 1.1,
+      "lengthPenalty": 0.0,
+      "promptImportance": 1.0
     }
   }
 }

@@ -99,6 +99,13 @@
                                 <option value="testQuestions">Preguntas tipo test</option>
                                 <option value="developQuestions">Preguntas de desarrollo</option>
                                 <option value="practicalExercise">Ejercicio práctico</option>
+                                <option value="topicSummary">Resumen de tema</option>
+                                <option value="glossary">Glosario</option>
+                                <option value="discussionCase">Caso práctico para discusión</option>
+                                <option value="conceptMap">Esquema o mapa conceptual</option>
+                                <option value="learningObjectives">Lista de objetivos de aprendizaje</option>
+                                <option value="collaborativeActivity">Actividad colaborativa</option>
+                                <option value="debateProposal">Propuesta de debate</option>
                             </select>
                         </div>
                     </div>
@@ -285,7 +292,7 @@
                                 <span>¡Analizar calidad!</span>
                             </div>
                         </button>
-                        <button id="copyButton" type="button" class="btn-action btn-copy" onclick="copyText()" disabled>
+                        <button id="copyButton" type="button" class="btn-action btn-copy" disabled>
                             <div class="btn-content">
                                 <i class="fas fa-copy me-2"></i>
                                 <span>Copiar Texto</span>
@@ -295,7 +302,7 @@
                                 <span>¡Copiar al portapapeles!</span>
                             </div>
                         </button>
-                        <button id="cleanButton" type="button" class="btn-action btn-clean" onclick="resetForm()" disabled>
+                        <button id="cleanButton" type="button" class="btn-action btn-clean" disabled>
                             <div class="btn-content">
                                 <i class="fas fa-eraser me-2"></i>
                                 <span>Limpiar</span>
@@ -327,10 +334,11 @@
         <small>Generador de Prompts para ChatGPT &copy; 2025</small>
     </footer>
     
-    <script src="main.js"></script>
-    <script src="advancedOptions.js"></script>
-    <script src="formHandlers.js"></script>
-    <script src="aiPromptGenerator.js"></script>
-    <script src="chatgptIntegration.js"></script>
+    <!-- Modularización: scripts como módulos ES6 -->
+    <script type="module" src="main.js"></script>
+    <script type="module" src="advancedOptions.js"></script>
+    <script type="module" src="formHandlers.js"></script>
+    <script type="module" src="aiPromptGenerator.js"></script>
+    <script type="module" src="chatgptIntegration.js"></script>
 </body>
 </html>

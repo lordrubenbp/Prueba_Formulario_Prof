@@ -1,3 +1,8 @@
+import { initializeFormHandlers } from './formHandlers.js';
+import { initializeAdvancedOptions, activateAdvancedFields, deactivateAdvancedFields } from './advancedOptions.js';
+import { initializeAIPromptGenerator } from './aiPromptGenerator.js';
+import { initializeChatGPTIntegration } from './chatgptIntegration.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize default preconfigurations in case fetch fails
     window.preconfigurations = {};
@@ -42,8 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     // Global event handlers
-    initializeAdvancedOptions();
     initializeFormHandlers();
+    initializeAdvancedOptions();
+    initializeChatGPTIntegration();
     initializeAIPromptGenerator();
     
     // Initialize tooltips

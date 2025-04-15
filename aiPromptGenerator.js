@@ -12,7 +12,7 @@ const OPENAI_API_CONFIG = {
     temperature: 0.7
 };
 
-function initializeAIPromptGenerator() {
+export function initializeAIPromptGenerator() {
     const generateBtn = document.getElementById('generatePromptBtn');
     const statusDiv = document.getElementById('generationStatus');
     const apiKeyInput = document.getElementById('apiKey');

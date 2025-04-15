@@ -1,10 +1,14 @@
+import { activateAdvancedFields, deactivateAdvancedFields } from './advancedOptions.js';
+
 const fields = ['role', 'action', 'conditions', 'additionalGuidance', 'formatRestrictions', 'temperature', 'diversityPenalty', 'topP', 'repetitionPenalty', 'maxTokens'];
 
-function initializeFormHandlers() {
+export function initializeFormHandlers() {
     document.getElementById('preconfig').addEventListener('change', handlePreconfigChange);
     document.getElementById('infoForm').addEventListener('submit', handleSubmit);
     document.getElementById('additionalGuidanceCheckbox').addEventListener('change', handleAdditionalGuidanceChange);
     document.getElementById('evaluateButton').addEventListener('click', handleEvaluatePrompt);
+    document.getElementById('copyButton').addEventListener('click', copyText);
+    document.getElementById('cleanButton').addEventListener('click', resetForm);
     
     // Add animation class to form sections for fade-in effect
     document.querySelectorAll('.form-section').forEach((section, index) => {
@@ -121,7 +125,14 @@ function createDynamicFields(fieldType, template, container) {
     const matches = template.match(/{{(.*?)}}/g);
     if (matches) {
         const fieldGroup = document.createElement('div');
-        fieldGroup.className = 'dynamic-fields p-3 border rounded bg-light';
+        fieldGroup.className = 'dynamic-fields p-3 border rounded';
+        
+        // Añadir tema oscuro compatible
+        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+            fieldGroup.classList.add('bg-dark');
+        } else {
+            fieldGroup.classList.add('bg-light');
+        }
         
         // Add header for dynamic fields
         const header = document.createElement('h6');
@@ -132,25 +143,51 @@ function createDynamicFields(fieldType, template, container) {
         // Create fields
         matches.forEach(match => {
             const cleanText = match.replace(/{{|}}/g, '').trim();
+            const fieldParts = cleanText.split(":");
+            const fieldName = fieldParts[0].trim();
+            const fieldType = fieldParts.length > 1 ? fieldParts[1].trim() : 'text';
+            
             const fieldContainer = document.createElement('div');
             fieldContainer.className = 'mb-3';
             
             const label = document.createElement('label');
-            label.className = 'form-label';
-            label.textContent = cleanText.split(":")[0].trim();
+            label.className = 'form-label fw-bold';
+            label.textContent = fieldName;
             
+            // Crear la entrada de forma sencilla sin botones no seleccionables
             const input = document.createElement('input');
-            input.type = cleanText.split(":")[1].trim();
-            input.className = 'form-control mb-2';
-            input.placeholder = `Introduzca ${cleanText.split(":")[0].trim()}...`;
+            input.type = fieldType === 'textarea' ? 'text' : fieldType;
+            input.className = 'form-control';
+            input.placeholder = `Introduzca ${fieldName}...`;
             input.dataset.template = match;
             
             fieldContainer.appendChild(label);
             fieldContainer.appendChild(input);
+            
+            // Agregar una descripción del tipo de campo
+            const helpText = document.createElement('small');
+            helpText.className = 'form-text text-muted mt-1';
+            helpText.textContent = getFieldTypeDescription(fieldType);
+            fieldContainer.appendChild(helpText);
+            
             fieldGroup.appendChild(fieldContainer);
         });
         
         container.appendChild(fieldGroup);
+    }
+}
+
+// Función auxiliar para obtener una descripción del tipo de campo
+function getFieldTypeDescription(fieldType) {
+    switch(fieldType) {
+        case 'text':
+            return 'Texto corto (palabras o frases)';
+        case 'textarea':
+            return 'Texto largo (párrafos o descripciones detalladas)';
+        case 'number':
+            return 'Valor numérico';
+        default:
+            return 'Campo de texto';
     }
 }
 
