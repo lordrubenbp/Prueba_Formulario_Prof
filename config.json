@@ -55,10 +55,10 @@
       "promptImportance": 1.0
     },
     "glossary": {
-      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
-      "action": "Elabora un glosario de términos clave sobre el/la {{Contexto:textarea}}",
-      "conditions": "El glosario debe estar enfocado en la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de detalle debe ser {{Nivel de detalle:text}}.",
-      "formatRestrictions": "Incluye {{Número de términos:number}} términos. Cada término debe ir seguido de su definición clara y breve. El resultado debe mostrarse en formato de lista.",
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}} con amplia experiencia en la elaboración de materiales didácticos.",
+      "action": "Elabora un glosario de términos clave sobre el/la {{Contexto:textarea}} que resulte claro, conciso y pedagógicamente útil para los estudiantes.",
+      "conditions": "El glosario debe estar enfocado en la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de detalle debe ser {{Nivel de detalle:text}}. Asegúrate de que las definiciones sean precisas académicamente pero comprensibles para el nivel formativo del estudiante.",
+      "formatRestrictions": "Incluye {{Número de términos:number}} términos organizados alfabéticamente. Cada término debe aparecer en negrita seguido de su definición clara y concisa (2-3 líneas máximo). Cuando sea relevante, incluye un breve ejemplo de aplicación o contexto. El resultado debe mostrarse en formato de lista.",
       "temperature": 0.1,
       "diversityPenalty": 0.2,
       "topK": 50,
@@ -68,10 +68,11 @@
       "promptImportance": 1.0
     },
     "discussionCase": {
-      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
-      "action": "Redacta un caso práctico para discusión sobre el/la {{Contexto:textarea}}",
-      "conditions": "El caso debe estar relacionado con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de dificultad debe ser {{Nivel de dificultad:text}}.",
-      "formatRestrictions": "El caso debe incluir: Descripción del caso, Preguntas para la discusión (mínimo {{Número de preguntas:number}}), y Sugerencias para el docente. El resultado debe mostrarse en texto plano.",
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}} con experiencia en metodologías de aprendizaje basado en casos.",
+      "action": "Redacta un caso práctico para discusión sobre el/la {{Contexto:textarea}} que promueva el pensamiento crítico y la aplicación de conocimientos teóricos a situaciones reales.",
+      "conditions": "El caso debe estar relacionado con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. El nivel de dificultad debe ser {{Nivel de dificultad:text}}. El caso debe presentar una situación realista, relevante y actual para el campo de estudio, con suficientes detalles para generar análisis profundo pero sin extenderse innecesariamente.",
+      "additionalGuidance": "Asegúrate de que el caso incorpore dilemas o problemas que no tengan una única solución evidente, fomentando así el debate y la consideración de múltiples perspectivas.",
+      "formatRestrictions": "El caso debe incluir: 1) Título atractivo y relevante, 2) Descripción narrativa del caso (contexto, personajes y problema central), 3) Preguntas para la discusión (mínimo {{Número de preguntas:number}}) organizadas de menor a mayor complejidad cognitiva, 4) Sugerencias para el docente que incluyan posibles líneas de análisis, conceptos clave a destacar y estrategias para facilitar la discusión. El resultado debe mostrarse en texto plano con clara separación entre secciones.",
       "temperature": 0.2,
       "diversityPenalty": 0.3,
       "topK": 50,
@@ -81,10 +82,11 @@
       "promptImportance": 1.0
     },
     "conceptMap": {
-      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
-      "action": "Elabora un esquema o mapa conceptual sobre el/la {{Contexto:textarea}}",
-      "conditions": "El esquema debe cubrir los conceptos principales de la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}.",
-      "formatRestrictions": "El esquema debe presentarse en formato de lista jerárquica o texto estructurado, mostrando relaciones entre conceptos. El resultado debe ser claro y visualmente organizado.",
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}} con habilidad en organizadores visuales del conocimiento.",
+      "action": "Elabora un esquema o mapa conceptual detallado sobre el/la {{Contexto:textarea}} que permita visualizar la estructura y relaciones entre los conceptos principales.",
+      "conditions": "El esquema debe cubrir los conceptos principales de la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. Debe incluir conceptos clave, principios fundamentales y sus interrelaciones de manera que ayude a los estudiantes a comprender la organización lógica de los contenidos.",
+      "additionalGuidance": "Utiliza una estructura clara que muestre la jerarquía entre conceptos principales y secundarios. Identifica con precisión las relaciones (causa-efecto, pertenencia, secuencia, etc.) entre los distintos elementos.",
+      "formatRestrictions": "El esquema debe presentarse en formato de lista jerárquica o texto estructurado, utilizando indentación, símbolos, números y conectores adecuados para mostrar relaciones entre conceptos. El resultado debe ser claro, visualmente organizado y fácil de trasladar a un diagrama visual. Limítate a un máximo de 3 niveles de jerarquía para mantener la claridad.",
       "temperature": 0.1,
       "diversityPenalty": 0.2,
       "topK": 50,
@@ -94,10 +96,11 @@
       "promptImportance": 1.0
     },
     "learningObjectives": {
-      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}}.",
-      "action": "Redacta una lista de objetivos de aprendizaje para el/la {{Contexto:textarea}}",
-      "conditions": "Los objetivos deben estar alineados con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}.",
-      "formatRestrictions": "Incluye {{Número de objetivos:number}} objetivos, redactados de forma clara y medible. El resultado debe mostrarse en formato de lista.",
+      "role": "Profesor universitario licenciado/grado en {{Grado/Licenciatura:text}} experto en {{Ámbito del que es experto:text}} con conocimientos en diseño curricular basado en competencias.",
+      "action": "Redacta una lista de objetivos de aprendizaje para el/la {{Contexto:textarea}} que sean claros, medibles y orientados a resultados concretos.",
+      "conditions": "Los objetivos deben estar alineados con la asignatura {{Nombre de la asignatura:text}}, del {{Año en el que se imparte la asignatura:number}} año del grado universitario de {{Nombre del grado universitario:text}}. Deben cubrir los dominios cognitivo, procedimental y actitudinal según corresponda al tipo de asignatura.",
+      "additionalGuidance": "Utiliza verbos de acción específicos y medibles siguiendo la taxonomía de Bloom revisada (recordar, comprender, aplicar, analizar, evaluar, crear). Asegúrate de que los objetivos sean realistas y alcanzables en el marco temporal de la asignatura.",
+      "formatRestrictions": "Incluye {{Número de objetivos:number}} objetivos, agrupados por dominios de aprendizaje (cognitivo, procedimental, actitudinal) cuando sea apropiado. Cada objetivo debe comenzar con un verbo de acción concreto e incluir el qué, cómo y para qué de la competencia a desarrollar. El resultado debe mostrarse en formato de lista numerada con una breve explicación de cómo se evaluará el logro de cada objetivo.",
       "temperature": 0.1,
       "diversityPenalty": 0.2,
       "topK": 50,
